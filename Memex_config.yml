@@ -1,0 +1,4 @@
+bib_all: "TestLibrary.bib"
+path_to_memex: ./_data/
+bibtex_keys: ./zotero_biblatex_keys.yml
+language_keys: ./_bib/bibtex_languages.yml
