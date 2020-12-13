@@ -1,4 +1,15 @@
 bib_all: "TestLibrary.bib"
 path_to_memex: ./_data/
+path_to_index: ./_data/index.html
 bibtex_keys: ./zotero_biblatex_keys.yml
-language_keys: ./_bib/bibtex_languages.yml
+language_keys: ./bibtex_languages.yml
+
+template_page: ./_misc/template_page.html
+template_index: ./_misc/template_index.html
+content_index: ./_misc/content_index.html
+
+memexDF_file: ./_data/memex.documentFrequencies
+tfPubl_ext: .publTF 
+tfPage_ext: .pageTF 
+tfIdfPubl_ext: .publTFIDF
+tfIdfPage_ext: .pageTFIDF

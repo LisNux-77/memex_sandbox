@@ -33,6 +33,33 @@ def generatePublicationInterface(citeKey, pathToBibFile):
 
         pageDic = functions.generatePageLinks(pNums)
 
+##########################################################################################
+#INDEX#
+
+##########################################################################################
+
+        #load templates for index page
+
+        with open(settings["template_index"], "r", encoding="utf8") as ti:
+            template_i = ti.read()
+
+        with open(settings["content_index"], "r", encoding="utf8") as ci:
+            content_i = ci.read()
+
+        pageTemp_i = template_i
+        pageTemp_i = pageTemp_i.replace("@MAINCONTENT@", content_i) #use content.html to create index content by replacing the string @MAINCONTENT@ 
+
+        #set path for index of Memex
+        pagePath_i = settings["path_to_index"]
+        with open(pagePath_i, "w", encoding="utf8") as f1:
+        	f1.write(pageTemp_i)
+
+
+############################################################################################
+#SINGLE PUBLICATION#
+
+############################################################################################
+        
         # load page template
         with open(settings["template_page"], "r", encoding="utf8") as ft:
             template = ft.read()
@@ -44,7 +71,7 @@ def generatePublicationInterface(citeKey, pathToBibFile):
 
         orderedPages = list(pageDic.keys())
 
-        for o in range(0, len(orderedPages)):
+        for o in range(0, len(orderedPages)): #loop through pages of individual bib file
             #print(o)
             k = orderedPages[o]
             v = pageDic[orderedPages[o]]
@@ -87,9 +114,11 @@ def generatePublicationInterface(citeKey, pathToBibFile):
                 f9.write(pageTemp)
 
 
+############################################################################################################
+#PROCESS ALL#
 
+############################################################################################################
 
-########################at the end
 def processAllRecords(bibData):
     keys = list(bibData.keys())
     random.shuffle(keys)
