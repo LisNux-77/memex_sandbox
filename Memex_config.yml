@@ -1,6 +1,7 @@
 bib_all: "TestLibrary.bib"
 path_to_memex: ./_data/
 path_to_index: ./_data/index.html
+path_to_content: ./_data/contents.html
 bibtex_keys: ./zotero_biblatex_keys.yml
 language_keys: ./bibtex_languages.yml
 
