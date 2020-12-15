@@ -75,7 +75,7 @@
 a {
     text-decoration: none;
     font-weight: bold;
-    color: #b30000;
+    color: #4c7aaf;
 }
 
 p{
@@ -172,7 +172,7 @@ table.navtable { width: 100%; }
 
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #4CAF50;
+    background-color: #af504c;
     color: white;
 }
 /*/////////////// nav bar end /////////////////*/
