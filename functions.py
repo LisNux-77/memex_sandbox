@@ -80,32 +80,7 @@ def processBibRecord(pathToMemex, bibRecDict):
         if not os.path.isfile(pdfFileDST): # this is to avoid copying that had been already copied.
             shutil.copyfile(pdfFileSRC, pdfFileDST)
 
-#generate links to all pages in a given publication so that it is easier to navigate
-def generatePageLinks(pNumList):
-    listMod = ["DETAILS"]
-    listMod.extend(pNumList)
-
-    toc = []
-    for l in listMod:
-        toc.append('<a href="%s.html">%s</a>' % (l, l))
-    toc = " ".join(toc)
-
-    pageDic = {}
-    for l in listMod:
-        pageDic[l] = toc.replace('>%s<' % l, ' style="color: red;">%s<' % l)
-
-    return(pageDic)
-
-
-#makes a bib record look more readable, more HTML friendly
-def prettifyBib(bibText):
-    bibText = bibText.replace("{{", "").replace("}}", "")
-    bibText = re.sub(r"\n\s+file = [^\n]+", "", bibText)
-    bibText = re.sub(r"\n\s+abstract = [^\n]+", "", bibText)
-    return(bibText)
-
-
-#generates a dictionary of citation keys and paths to specific types of files
+# creates a dictionary of citationKey:Path pairs for a relevant type of files
 def dicOfRelevantFiles(pathToMemex, extension):
     dic = {}
     for subdir, dirs, files in os.walk(pathToMemex):
