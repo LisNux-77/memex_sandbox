@@ -8,9 +8,11 @@ language_keys: ./bibtex_languages.yml
 template_page: ./_misc/template_page.html
 template_index: ./_misc/template_index.html
 content_index: ./_misc/content_index.html
+template_search: ./_misc/template_search.html
 
 memexDF_file: ./_data/memex.documentFrequencies
 tfPubl_ext: .publTF 
 tfPage_ext: .pageTF 
 tfIdfPubl_ext: .publTFIDF
 tfIdfPage_ext: .pageTFIDF
+path_to_tfidf: /home/lisnux/Desktop/UniWien/WS2021/070172_UEMethodologicalCourse/hw070172/MEMEX_building/memex_sandbox/results_tfidf

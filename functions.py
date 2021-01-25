@@ -10,7 +10,7 @@ def loadBib(bibTexFile):
     bibDic = {}
     recordsNeedFixing = []
 
-    with open(bibTexFile, "r", encoding="utf8") as f1:
+    with open(bibTexFile, "r") as f1:
         records = f1.read().split("\n@")
 
         for record in records[1:]:
@@ -91,3 +91,67 @@ def dicOfRelevantFiles(pathToMemex, extension):
                 value = os.path.join(subdir, file)
                 dic[key] = value
     return(dic)
+
+# loads lists of stopwords
+def loadMultiLingualStopWords(listOfLanguageCodes):
+    print("Loading stopwords...")
+    stopwords = []
+    pathToFiles = settings["stopwords"]
+    codes = json.load(open(os.path.join(pathToFiles, "languages.json")))
+
+    for l in listOfLanguageCodes:
+        with open(os.path.join(pathToFiles, codes[l]+".txt"), "r", encoding="utf8") as f1:
+            lang = f1.read().strip().split("\n")
+            stopwords.extend(lang)
+
+    stopwords = list(set(stopwords))
+    print("\tStopwords for: ", listOfLanguageCodes)
+    print("\tNumber of stopwords: %d" % len(stopwords))
+    #print(stopwords)
+    return(stopwords)
+
+# load settings from our YML-like file
+# - the format of our YML is more relaxed than that of the original YML (YML does not support comments)
+def loadYmlSettings(ymlFile):
+    with open(ymlFile, "r", encoding="utf8") as f1:
+        data = f1.read()
+        data = re.sub(r"#.*", "", data) # remove comments
+        data = re.sub(r"\n+", "\n", data) # remove extra linebreaks used for readability
+        data = re.split(r"\n(?=\w)", data) # splitting
+        dic = {}
+        for d in data:
+            if ":" in d:
+                d = re.sub(r"\s+", " ", d.strip())
+                d = re.split(r"^([^:]+) *:", d)[1:]
+                key = d[0].strip()
+                value = d[1].strip()
+                if key == "prioritized_publ":
+                    value = d[1].strip()
+                    value = re.sub("\s+", "", value).split(",")
+                dic[key] = value
+    #input(dic)
+    return(dic)
+
+# HTML: generates TOCs for each page; the current page is highlighted with red
+def generatePageLinks(pNumList):
+    listMod = ["DETAILS"]
+    listMod.extend(pNumList)
+
+    toc = []
+    for l in listMod:
+        toc.append('<a href="%s.html">%s</a>' % (l, l))
+    toc = " ".join(toc)
+
+    pageDic = {}
+    for l in listMod:
+        pageDic[l] = toc.replace('>%s<' % l, ' style="color: red;">%s<' % l)
+
+    return(pageDic)
+
+# HTML: makes BIB more HTML friendly
+def prettifyBib(bibText):
+    bibText = bibText.replace("{{", "").replace("}}", "")
+    bibText = re.sub(r"\n\s+file = [^\n]+", "", bibText)
+    bibText = re.sub(r"\n\s+abstract = [^\n]+", "", bibText)
+    return(bibText)
+
