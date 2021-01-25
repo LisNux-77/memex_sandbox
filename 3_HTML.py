@@ -29,12 +29,12 @@ def generatePublicationInterface(citeKey, pathToBibFile):
 ######################
 #SINGLE PUBLICATION#
 ######################
-	jsonFile = pathToBibFile.replace(".bib", ".json")
+	jsonFile = pathToBibFile.replace(".bib", ".json") #get JSON files
 	with open(jsonFile) as jsonData:
-		ocred = json.load(jsonData)
-		pNums = ocred.keys()
+		ocred = json.load(jsonData) #open file
+		pNums = ocred.keys() #get pages of publication
 
-		pageDic = functions.generatePageLinks(pNums)
+		pageDic = functions.generatePageLinks(pNums) #use pre-defined function
 		
 		# load page template
 		with open(settings["template_page"], "r", encoding="utf8") as ft:
@@ -42,10 +42,21 @@ def generatePublicationInterface(citeKey, pathToBibFile):
 
 		# load individual bib record
 		bibFile = pathToBibFile
-		bibDic = functions.loadBib(bibFile)
-		bibForHTML = functions.prettifyBib(bibDic[citeKey]["complete"])
+		bibDic = functions.loadBib(bibFile) #use pre-defined function
+		print(bibDic)
+		bibForHTML = functions.prettifyBib(bibDic[citeKey]["complete"]) #use pre-defined function
 
-		orderedPages = list(pageDic.keys())
+		orderedPages = list(pageDic.keys()) #make list of pages
+
+		authorOrEditor = "[No data]"
+		if "editor" in bibDic[citeKey]:
+			authorOrEditor = bibDic[citeKey]["editor"]
+		if "author" in bibDic[citeKey]:
+			authorOrEditor = bibDic[citeKey]["author"]
+
+		date = "unidentified"
+		if "year" in bibDic[citeKey]:
+			date = bibDic[citeKey]["year"]
 
 		for o in range(0, len(orderedPages)): #loop through pages of individual bib file
 			#print(o)
@@ -53,29 +64,36 @@ def generatePublicationInterface(citeKey, pathToBibFile):
 			v = pageDic[orderedPages[o]] #page
 
 			pageTemp = template 
-			pageTemp = pageTemp.replace("@PAGELINKS@", v)
-			pageTemp = pageTemp.replace("@PATHTOFILE@", "")
-			pageTemp = pageTemp.replace("@CITATIONKEY@", citeKey)
+			pageTemp = pageTemp.replace("@PAGELINKS@", v) #replace pattern with page
+			pageTemp = pageTemp.replace("@PATHTOFILE@", "") #replace pattern with empty string
+			pageTemp = pageTemp.replace("@CITATIONKEY@", citeKey) #replace pattern with publication ID
+			wCloud = '\n<img src="../@WCLOUD@" width="100%" alt="wordcloud">'.replace("@WCLOUD@", "%s.jpg" % citeKey)
+			pageTemp = pageTemp.replace("@WORD_CLOUD@", wCloud)
+			pageTemp = pageTemp.replace("@PUB_AUTHOR@", authorOrEditor)
+			pageTemp = pageTemp.replace("@PUB_YEAR@", date)
+			pageTemp = pageTemp.replace("@PUB_TITLE@", bibDic[citeKey]["title"].replace("{", "").replace("}", ""))
 
-			if k != "DETAILS":
-				mainElement = '<img src="@PAGEFILE@" width="100%" alt="">'.replace("@PAGEFILE@", "%s.png" % k)
+
+			if k != "DETAILS": #if not set to overview page
+				mainElement = '<img src="@PAGEFILE@" width="100%" alt="">'.replace("@PAGEFILE@", "%s.png" % k) #use ocred page as main element
 				pageTemp = pageTemp.replace("@MAINELEMENT@", mainElement)
 				pageTemp = pageTemp.replace("@OCREDCONTENT@", ocred[k].replace("\n", "<br>"))
 			else:
 				mainElement = bibForHTML.replace("\n", "<br> ")
 				mainElement = '<div class="bib">%s</div>' % mainElement
-				mainElement += '\n<img src="wordcloud.jpg" width="100%" alt="wordcloud">'
+				#mainElement += '\n<img src="../@WCLOUD@" width="100%" alt="wordcloud">'.replace("@WCLOUD@", "%s.jpg" % citeKey)
 				pageTemp = pageTemp.replace("@MAINELEMENT@", mainElement)
 				pageTemp = pageTemp.replace("@OCREDCONTENT@", "")
 
 			# @NEXTPAGEHTML@ and @PREVIOUSPAGEHTML@
+			#set order of the page layout
 			if k == "DETAILS":
 				nextPage = "0001.html"
-				prevPage = ""
+				prevPage = "" #no previous page
 			elif k == "0001":
 				nextPage = "0002.html"
-				prevPage = "DETAILS.html"
-			elif o == len(orderedPages)-1:
+				prevPage = "DETAILS.html" #set previous page because it is not a serial number
+			elif o == len(orderedPages)-1: #take care of special case
 				nextPage = ""
 				prevPage = orderedPages[o-1] + ".html"
 			else:
@@ -86,7 +104,7 @@ def generatePublicationInterface(citeKey, pathToBibFile):
 			pageTemp = pageTemp.replace("@PREVIOUSPAGEHTML@", prevPage)
 
 			pagePath = os.path.join(pathToBibFile.replace(citeKey+".bib", ""), "pages", "%s.html" % k)
-			with open(pagePath, "w", encoding="utf8") as f9:
+			with open(pagePath, "w", encoding="utf8") as f9: #set path for individual pages
 				f9.write(pageTemp)
 
 ######################
@@ -119,18 +137,19 @@ def generateStartPages(pathToMemex):
 
 	for subdir, dirs, files in os.walk(pathToMemex):
 		for file in files:
-			if file.endswith(".bib"):
-				pathWhereBibIs = os.path.join(subdir, file)
-				tempDic = functions.loadBib(pathWhereBibIs)
-				publicationDic.update(tempDic)
+			if file.endswith(".bib"): #look for files with .bib extension in Memex
+				pathWhereBibIs = os.path.join(subdir, file) #generate path to bib file
+				tempDic = functions.loadBib(pathWhereBibIs) #use pre-defined function
+				publicationDic.update(tempDic) #add key:value pairs to dic
 
 # generate data for the main CONTENTS
 	singleItemTemplate = '<li><a href="@RELATIVEPATH@/pages/DETAILS.html">[@CITATIONKEY@]</a> @AUTHOROREDITOR@ (@DATE@) - <i>@TITLE@</i></li>'
 	contentsList = []
 
 	for citeKey,bibRecord in publicationDic.items():
-		relativePath = functions.generatePublPath(pathToMemex, citeKey).replace(pathToMemex, "")
+		relativePath = functions.generatePublPath(pathToMemex, citeKey).replace(pathToMemex, "") #use pre-defined function
 
+		#take care of missing data or unclear data
 		authorOrEditor = "[No data]"
 		if "editor" in bibRecord:
 			authorOrEditor = bibRecord["editor"]
@@ -143,7 +162,7 @@ def generateStartPages(pathToMemex):
 
 		title = bibRecord["title"]
 
-		# forming a record
+		# forming a record with respective data of single publication
 		recordToAdd = singleItemTemplate
 		recordToAdd = recordToAdd.replace("@RELATIVEPATH@", relativePath)
 		recordToAdd = recordToAdd.replace("@CITATIONKEY@", citeKey)
@@ -153,15 +172,16 @@ def generateStartPages(pathToMemex):
 
 		recordToAdd = recordToAdd.replace("{", "").replace("}", "")
 
-		contentsList.append(recordToAdd)
+		contentsList.append(recordToAdd) #add single publication info to content list
 
-	contents = "\n<ul>\n%s\n</ul>" % "\n".join(sorted(contentsList))
-	mainContent = "<h1>CONTENTS of MEMEX</h1>\n\n" + contents
+	contents = "\n<ul>\n%s\n</ul>" % "\n".join(sorted(contentsList)) #list of all publications
+	mainContent = "<h1>CONTENTS of MEMEX</h1>\n\n" + contents #headline
 
 	# save the CONTENTS page
 	with open(os.path.join(pathToMemex, "contents.html"), "w", encoding="utf8") as f2:
 		f2.write(template_i.replace("@MAINCONTENT@", mainContent))
-	'''
+
+'''
 	pageTemp_c = pageTemp_i.replace("@CITEKEY@", citeKey)
 	pageTemp_c = pageTemp_i.replace("@PATHTOPUBL@", detailPage)
 
@@ -176,9 +196,9 @@ def generateStartPages(pathToMemex):
 
 def processAllRecords(bibData):
 	keys = list(bibData.keys())
-	random.shuffle(keys)
+	random.shuffle(keys) #to go through records in random order
 
-	for key in keys:
+	for key in keys: #loop through publications
 		bibRecord = bibData[key]
 		citationKey = bibRecord["rCite"]
 
