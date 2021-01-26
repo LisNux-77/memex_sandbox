@@ -1,6 +1,7 @@
 #import functions
 
 import os, yaml, json, re
+import unicodedata
 
 #pre-defined functions
 import functions
@@ -42,6 +43,21 @@ searchesTemplate = """
 
 </table>
 </div>
+"""
+
+publicationsTemplate = """
+<button class="collapsible">PUBLICATIONS INCLUDED INTO MEMEX</button>
+<table id="" class="display" width="100%">
+<thead>
+    <tr>
+        <th><i>link</i></th>
+        <th>citeKey, author, date, title</th>
+    </tr>
+</thead>
+<tbody>
+@TABLECONTENTS@
+</tbody>
+</table>
 """
 
 # generate search pages and TOC
@@ -89,8 +105,51 @@ def formatSearches(pathToMemex):
     print(toc)
     return(toc)
 
+
+def formatPublList(pathToMemex):
+    ocrFiles = functions.dicOfRelevantFiles(pathToMemex, settings["ocr_results"])
+    bibFiles = functions.dicOfRelevantFiles(pathToMemex, ".bib")
+
+    contentsList = []
+
+    for key, value in ocrFiles.items():
+        if key in bibFiles:
+            bibRecord = functions.loadBib(bibFiles[key])
+            bibRecord = bibRecord[key]
+
+            relativePath = functions.generatePublPath(pathToMemex, key).replace(pathToMemex, "")
+
+            authorOrEditor = "[No data]"
+            if "editor" in bibRecord:
+                authorOrEditor = bibRecord["editor"]
+            if "author" in bibRecord:
+                authorOrEditor = bibRecord["author"]
+
+
+            date = "unidentified"
+            if "year" in bibRecord:
+            	date = bibRecord["year"]
+
+            title = bibRecord["title"]
+
+            # formatting template
+            citeKey = '<div class="ID">[%s]</div>' % key
+            publication = '%s (%s) <i>%s</i>' % (authorOrEditor, date, title)
+            search = unicodedata.normalize('NFKD', publication).encode('ascii','ignore')
+            publication += " <div class='hidden'>%s</div>" % search
+            link = '<a href="%s/pages/DETAILS.html"><i>read</i></a>' % relativePath
+
+            singleItemTemplate = '<tr><td>%s</td><td>%s %s</td></tr>' % (link, citeKey, publication)
+            recordToAdd = singleItemTemplate.replace("{", "").replace("}", "")
+
+            contentsList.append(recordToAdd)
+
+    contents = "\n".join(sorted(contentsList))
+    final = publicationsTemplate.replace("@TABLECONTENTS@", contents)
+    return(final)
+
 	
-def newIndexPage(searches):
+def newIndexPage(searches, pubList):
 	with open(settings["template_index"], "r", encoding="utf8") as ti:
 		template_i = ti.read()
 
@@ -100,6 +159,7 @@ def newIndexPage(searches):
 	pageTemp_i = template_i
 	pageTemp_i = pageTemp_i.replace("@MAINCONTENT@", content_i)
 	pageTemp_i = pageTemp_i.replace("@SEARCHRESULTS@", searches)
+	pageTemp_i = pageTemp_i.replace("@PUB_LIST@", pubList)
 
 	#set path for index page of Memex
 	pagePath_i = settings["path_to_index"]
@@ -108,6 +168,7 @@ def newIndexPage(searches):
 
 
 searches = formatSearches(pathToMemex)
-newIndexPage(searches)
+pubList = formatPublList(pathToMemex)
+newIndexPage(searches, pubList)
 
 
