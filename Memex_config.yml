@@ -4,6 +4,8 @@ path_to_index: ./_data/index.html
 path_to_content: ./_data/contents.html
 bibtex_keys: ./zotero_biblatex_keys.yml
 language_keys: ./bibtex_languages.yml
+ocr_results: .json
+stopwords: ./_misc/stopwords/
 
 template_page: ./_misc/template_page.html
 template_index: ./_misc/template_index.html
@@ -16,3 +18,8 @@ tfPage_ext: .pageTF
 tfIdfPubl_ext: .publTFIDF
 tfIdfPage_ext: .pageTFIDF
 path_to_tfidf: /home/lisnux/Desktop/UniWien/WS2021/070172_UEMethodologicalCourse/hw070172/MEMEX_building/memex_sandbox/results_tfidf
+
+# FILE NAMES WITH ANALYTICAL RESULTS
+tfidf_publ: results_tfidf_publications.dataJson
+publ_cosDist: results_cosineDist_publications.dataJson
+page_cosDist: results_cosineDist_pages.dataJson
