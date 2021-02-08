@@ -8,15 +8,35 @@
 <link rel="stylesheet" type="text/css" href="../../../../../_misc/style.css">
 <script type="text/javascript" src="../../../../../_misc/index.js"></script>
 
+<!-- Activating Data Table Filtering -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  
+<script>
+    $(document).ready(function () {
+        $('#publications').DataTable({
+          "pageLength": 50,
+          "order": [[1, "desc"]]
+        });
+    });
+</script>
+
+<!--ADDITIONALFUNCTIONALITYELEMENTS-->
+
 </head>
 <body>
 
 <div class="sidenav">
+  <small>
   <center><i>these numbers do not correspond to the actual page numbers</i>
+  </small>
   <br>
   @PAGELINKS@
   <br>
+  <small>
   <i>these numbers do not correspond to the actual page numbers</i></center>
+  </small>
 </div>
 
 <div class="maintext">
@@ -30,7 +50,7 @@
 
 
 <!-- EL1-start: this element can be repeated as needed-->
-<button class="collapsible">BIBLIOGRAPHICAL DETAILS</button>
+<button class="collapsible">Link to PDF</button>
 <div class="content">
   <p>
   <center>
@@ -40,26 +60,16 @@
   </center>
   </p>
 </div>
-
-<!-- EL1-end: this element can be repeated as needed-->
-
-@MAINELEMENT@
-
-<button class="collapsible">CONNECTED TEXTS</button>
-<div class="content">
+<div>
+  <p><b><center>@PUB_AUTHOR@ (@PUB_YEAR@), <i>@PUB_TITLE@</i></center></b></p>
+  <hr>
+</div>
+<div>
   <p>
-  @CONNECTEDTEXTS@
+  @MAINELEMENT@
   </p>
 </div>
-
-<button class="collapsible">OCREDTEXT</button>
-<div class="content">
-  <div class="bib">
-  @OCREDCONTENT@
-  </div>
-</div>
-
-<!--INSERTADDITIONALELEMENTS-->
+<!-- EL1-end: this element can be repeated as needed-->
 
 <div class="topnav">
   <a class="active" href="../../../../index.html" style="float:left">MEMEX SANDBOX</a>
