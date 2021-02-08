@@ -126,7 +126,7 @@ def formatPublList(pathToMemex):
                 authorOrEditor = bibRecord["author"]
 
 
-            date = "unidentified"
+            date = "nodate"
             if "year" in bibRecord:
             	date = bibRecord["year"]
 
@@ -146,6 +146,7 @@ def formatPublList(pathToMemex):
 
     contents = "\n".join(sorted(contentsList))
     final = publicationsTemplate.replace("@TABLECONTENTS@", contents)
+
     return(final)
 
 	
