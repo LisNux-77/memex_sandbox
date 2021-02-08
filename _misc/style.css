@@ -1,12 +1,21 @@
 
 .search_input_font {
-    font-family: 'Amiri', 'Geeza Pro', 'Courier New', 'Arial', 'LateefRegular';
-    font-size: 28px;
+    font-family: 'Avenir', 'Zapf Chancery';
+    font-size: 20px;
+}
+
+.mainList {
+  font-family: 'Avenir', 'Zapf Chancery', 'Leto';
+  font-size: 14px;
+}
+
+tr:hover {
+  background-color: white;
 }
 
 .english{
-    font-family: 'Brill', 'Gentium', 'Baskerville';
-    font-size: 24px;
+    font-family: 'Avenir', 'Zapf Chancery';
+    font-size: 20px;
     line-height: 1;
     margin: 20px 0;
     padding-left: 20px;
@@ -15,8 +24,10 @@
     /*margin-left:  5%;*/
 }
 
+.hidden { font-size: 0; }
+
 .blockquote{
-    font-family: 'Brill', 'Gentium', 'Baskerville';
+    font-family: 'Avenir', 'Zapf Chancery';
     font-size: 24px;
     line-height: 1;
     margin: 20px 0;
@@ -26,20 +37,20 @@
 }
 
 .ID{
-    font-family: 'Courier New';
+    font-family: 'Monaco';
     font-weight: bold;
     font-size: 18px;
     line-height: 1;
     margin: 36px 0;
-    background-color: #DDD;
-    color: #b30000;
+    background-color: white;
+    color: #8baad1;
     display: inline;
     /*margin-right: 15%;*/
     /*margin-left:  15%;*/
 }
 
 .bib{
-    font-family: 'Courier New';
+    font-family: 'Monaco';
     font-weight: bold;
     font-size: 12px;
     line-height: 1;
@@ -55,11 +66,11 @@
 .URI {
     font-size: 22px;
     font-weight: normal;
-    font-family: "Courier New", 'Amiri', 'Lateef', 'Geeza Pro', serif;
+    font-family: 'Avenir';
     padding: 0;
     margin: 0;
     text-indent: 0;
-    color: #b30000;
+    color: #8baad1;
     text-align: center;
 }
 
@@ -75,7 +86,7 @@
 a {
     text-decoration: none;
     font-weight: bold;
-    color: #4c7aaf;
+    color: #5c647c;
 }
 
 p{
@@ -92,8 +103,8 @@ li{
 /* collapsible elements*/
 
 .collapsible {
-  font-family: "Baskerville", 'Garamond', serif;
-  background-color: #777;
+  font-family: "Avenir", serif;
+  background-color: #363237;
   color: white;
   cursor: pointer;
   padding: 18px;
@@ -105,7 +116,7 @@ li{
 }
 
 .active, .collapsible:hover {
-  background-color: #333;
+  background-color: #2c2a29;
 }
 
 .collapsible:after {
@@ -135,7 +146,7 @@ li{
 body {
     width: 100%;
     background-color: "white";
-    font-family: Baskerville, Brill;
+    font-family: 'Avenir';
     margin: 0;
     padding: 0;
 }
@@ -150,7 +161,7 @@ table.navtable { width: 100%; }
 /*////////////// nav bar start /////////////////*/
 /* Add a black background color to the top navigation */
 .topnav {
-    background-color: #333;
+    background-color: #363237;
     overflow: hidden;
 }
 
@@ -166,13 +177,13 @@ table.navtable { width: 100%; }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-    background-color: #ddd;
+    background-color: #f2f2f2;
     color: black;
 }
 
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #af504c;
+    background-color: #9a7c78;
     color: white;
 }
 /*/////////////// nav bar end /////////////////*/
@@ -194,15 +205,14 @@ table.navtable { width: 100%; }
 
 .sidenav a {
   padding-left: 5px;
-  text-decoration: none;
+  text-decoration: underline overline #b49d9d;
   font-weight: bold;
-  font-size: 18px;
-  color: #D6DBDF;
+  font-size: 14px;
+  color: #b49d9d;
   /*display: block;*/
 }
-
 .sidenav a:hover {
-  color: red;
+  color: #f0e9ea;
 }
 /*/////////////// side nav bar end /////////////////*/
 
@@ -215,21 +225,22 @@ table.navtable { width: 100%; }
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #333;
+  background-color: #363237;
   overflow-x: hidden;
   padding-top: 5px;
 }
 
 .sidenavindex a {
   padding-left: 5px;
-  text-decoration: none;
+  text-decoration: underline overline double ;
   font-weight: bold;
-  font-size: 18px;
-  color: #D6DBDF;
+  font-size: 22px;
+  color: #f3edee;
   display: block;
 }
 
 .sidenavindex a:hover {
-  color: white;
+  color: #d6b7af;
 }
 /*/////////////// side nav bar end /////////////////*/
+
